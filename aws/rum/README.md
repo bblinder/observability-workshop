@@ -36,6 +36,7 @@ Create the Terraform Specific environment variables which are required to setup 
 - access_token: The Access Token from the Org being used for the workshop
 - rum_token: The RUM Token from the Org being used for the workshop
 - realm: The Realm for the Org being used for the workshop
+- env: A unique Environment such as your initials, helps to identify your resources when using shared Accounts
 - key_name: The name of your AWS SSH Key in the AZ you intend to deploy your instances into
 - private_key_path: Path to the location of your private key linked to the AWS SSH Key, e.g."~/.ssh/id_rsa"
 - aws_region: The AWS Region you want to deploy your instances into
@@ -44,6 +45,7 @@ Create the Terraform Specific environment variables which are required to setup 
 export TF_VAR_access_token="YOUR_ACCESS_TOKEN"
 export TF_VAR_rum_token="YOUR_RUM_TOKEN"
 export TF_VAR_realm="YOUR_REALM"
+export TF_VAR_env="YOUR_ENVIRONMENT"
 export TF_VAR_key_name="YOUR_SSH_KEY_NAME"
 export TF_VAR_private_key_path="YOUR_SSH_KEY_PATH"
 export TF_VAR_aws_region="YOUR_AWS_REGION"
@@ -71,6 +73,7 @@ Contents of terraform.tfvars which should be located in this 'rum' folder (this 
 access_token = "YOUR_ACCESS_TOKEN"
 rum_token= "YOUR_RUM_TOKEN"
 realm = "YOUR_REALM"
+env = "YOUR_ENVIRONMENT"
 
 ### AWS Variables ###
 key_name = "YOUR_SSH_KEY_NAME"
@@ -98,28 +101,26 @@ Terraform will now do its magic and deploy the rum instances.  The output from t
 
 TIP: For mac users, the Online_Boutique_URL is clickable if you hold down `<cmd>` whilst clicking, this will take you straight to the Online Boutique running on the RUM Master, but please allow a couple of minutes for it to fully deploy.
 
-There will be a single `RUM Master`, a `No RUM` version and typically 3 Rum Workers (value set in variables.tf).  The `No Rum` version is simply there to enable you to show workshop attendees the differences in the headers that have enabled RUM.
+There will be a single `RUM Master` and typically 3 Rum Workers (value set in variables.tf). 
 
 The RUM Workers will automatically start to generate load against the RUM Master and populate the system with both APM and RUM data.
 
-Below is an example of the output with the 5 Instances and 2 URLs.  The first value in the 'no_rum_details' and 'rum_master_details' output, in this example `epwh` & `nxuf` are their unique identifiers, created in case there are multiple workshops running at the same time, it will appear as the prefix to the Environment and Cluster Names in the Splunk UI. e.g. `nxuf-rum-master`
+Below is an example of the output with the 4 Instances and the URL for the UI.  The first value in the 'rum_master_details' output, in this example `gh` is the Environment Variable you set, this allows multiple deployments to run at the same time within a common AWS Account. This will be used as a prefix to the Environment and Cluster Names in the Splunk UI. e.g. `gh-rum-master`
 
 ```bash
-no_rum_details = tolist([
-  "epwh, no-rum, 54.217.144.37, YGyhOvukBlaU",
-])
-no_rum_online_boutique_details = tolist([
-  "http://54.217.144.37:81",
+Apply complete! Resources: 13 added, 0 changed, 0 destroyed.
+
+Outputs:
+
+rum_master_details = tolist([
+  "gh, gh-rum-master, 54.216.27.220, D03gFVhRLQYk",
 ])
 rum_online_boutique_details = tolist([
-  "http://18.203.127.114:81",
-])
-rum_master_details = tolist([
-  "nxuf, rum-master, 18.203.127.114, bHTyPhTHvJ7V",
+  "http://54.216.27.220:81",
 ])
 rum_worker_details = tolist([
-  "rum-worker-1, 34.245.39.225, NyfIewLpFfR4",
-  "rum-worker-2, 3.249.38.51, vakkn1erLgUz",
-  "rum-worker-3, 34.245.208.75, ehjI7PqqRLeT",
+  "gh-rum-worker-1, 54.229.121.190, BBtQqLMPOtvr",
+  "gh-rum-worker-2, 52.51.193.194, 5VvJkeTT8Pmv",
+  "gh-rum-worker-3, 18.203.127.52, X93jxiWTg4bu",
 ])
 ```

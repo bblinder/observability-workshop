@@ -17,7 +17,7 @@ resource "aws_instance" "rum_worker" {
   }
 
   tags = {
-    Name = lower(join("_", ["${var.env}", "${format("rum-worker-%01d", count.index + 1)}"]))
+    Name = lower(join("-", ["${var.env}", "${format("rum-worker-%01d", count.index + 1)}"]))
     Environment = lower(var.env)
     Role  = "RUM Worker"
   }
