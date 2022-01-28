@@ -22,8 +22,9 @@ resource "aws_instance" "no_rum" {
   }
 
   tags = {
-    Name  = "no-rum"
-    Role  = "No RUM Example"
+    Name = lower(join("_", ["${var.env}", "no-rum"]))
+    Environment = lower(var.env)
+    Role  = "No RUM"
   }
 
   provisioner "file" {

@@ -48,3 +48,4 @@ data "aws_ami" "latest-ubuntu" {
 variable "access_token" {}
 variable "rum_token" {}
 variable "realm" {}
+variable "env" {}
